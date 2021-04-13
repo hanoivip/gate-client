@@ -1,0 +1,86 @@
+#my-payment-list {
+	margin-top: 100px;
+	margin-left: 10%;
+	height: 1000px;
+	width: 80%;
+}
+
+#my-payment-type {
+	float: left;
+	border: 1px solid black; /* Green */
+	padding: 20px 20px 20px 20px;
+	text-align: center;
+	width: 260px;
+	height: 260px;
+	min-width: 260px;
+	min-height: 260px;
+	font-size: 20px;
+}
+
+#my-payment-type img {
+	width: 150px;
+	height: 100px;
+}
+
+#my-payment-type button {
+	background-color: green;
+	width: 50px;
+	height: 30px;
+	margin-top: 20px;
+}
+
+#my-payment-type select {
+	-webkit-appearance: menulist;
+	width: 70px;
+}
+
+#my-payment-rule {
+	float: left;
+	padding: 20px 20px 20px 20px;
+	text-align: left;
+	width: 260px;
+	height: 260px;
+	min-width: 260px;
+	min-height: 260px;
+	font-size: 40px;
+	color: red;
+    text-decoration: underline;
+}
+
+#my-payment-rule-model p {
+	color: black;
+	font-size: 16px;
+}
+
+#my-payment-channel {
+	text-align: left;
+	margin-top: 100px;
+	margin-left: 200px;
+}
+
+#my-payment-channel div {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+#my-payment-channel div input {
+	border: solid;
+}
+
+#my-payment-channel button {
+	background-color: green;
+	width: 50px;
+	height: 30px;
+}
+
+#my-payment-channel a {
+	margin-top: 50px;
+}
+
+#my-payment-history {
+	font-size: 20px;
+}
+
+#my-payment-history table, th, td {
+  border: 1px solid black;
+}

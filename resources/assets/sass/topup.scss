@@ -1,0 +1,43 @@
+#sub-history .status0 {
+	background-color: green;	
+}
+
+#sub-history .status1 {
+	background-color: red;	
+}
+
+#sub-history .status2 {
+	background-color: yellow;	
+}
+
+#sub-history .status3 {
+	background-color: cyan;	
+}
+
+#sub-history-pages ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: white;
+}
+
+#sub-history-pages li {
+  float: left;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+#mod-history-pages ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: white;
+}
+
+#mod-history-pages li {
+  float: left;
+  margin-left: 10px;
+  cursor: pointer;
+}
