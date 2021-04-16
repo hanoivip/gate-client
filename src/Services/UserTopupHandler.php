@@ -3,11 +3,7 @@
 namespace Hanoivip\GateClient\Services;
 
 use Hanoivip\Events\Gate\UserTopup;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use Exception;
-use Hanoivip\GateClient\Models\StatisticType;
-use Hanoivip\GateClient\Models\Statistic;
 
 class UserTopupHandler
 {

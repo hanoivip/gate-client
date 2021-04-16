@@ -2,31 +2,14 @@
 
 namespace Hanoivip\GateClient;
 
-use Illuminate\Support\ServiceProvider;
-use Hanoivip\GateClient\Contracts\IGateClient;
-use Hanoivip\GateClient\Services\RemoteGateClient;
-use Hanoivip\GateClient\Services\GateResponseParser;
-use Hanoivip\GateClient\Services\TestGateResponseParser;
-use Hanoivip\GateClient\Services\BalanceService;
 use Hanoivip\GateClient\Policies\GiftPolicy;
+use Hanoivip\GateClient\Services\BalanceService;
+use Illuminate\Support\ServiceProvider;
 
 class TopupServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        /*
-        if ($this->app->environment('local')) {
-            $this->app->bind("GateResponseParser", function ($app, $text) {
-                return new TestGateResponseParser($text);
-            });
-        }
-        if ($this->app->environment('production')) {
-            $this->app->bind("GateResponseParser", function ($app, $text) {
-                return new GateResponseParser($text);
-            });
-        }
-        $this->app->bind(IGateClient::class, RemoteGateClient::class);
-        */
         $this->app->bind("BalanceService", BalanceService::class);
         $this->app->bind("GiftPolicy", function ($app, $cfg) {
             return new GiftPolicy($cfg);
