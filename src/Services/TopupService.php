@@ -291,14 +291,10 @@ class TopupService
     {
         $route = GateFacade::routing($type, $dvalue);
         /** @var IRoutingResult $route */
-        //if (!$ret['available'])
         if (!$route->isAvaiable())
             return __('hanoivip::topup.channel-maintain');
-        //if ($ret['busy'])
         if ($route->isBusy())
             return __('hanoivip::topup.channel-unavailable');
-        //if (empty($ret['pid']))
-        //    throw new Exception('Topup partner ID not determined yet!');
         // Save temp data
         $oldRoute = $this->getTopupSession($uid);
         if (!empty($oldRoute))
@@ -421,7 +417,7 @@ class TopupService
     {
         $route = $this->getTopupSession($uid);
         if (empty($route))
-            throw new Exception('Quá thời gian thực hiện, mời thực hiện lại.');
+            return false;
         $session = $route['session'];
         GateFacade::cancel($session);
         $this->clearTopupSession($uid);

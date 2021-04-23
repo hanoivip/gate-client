@@ -20,10 +20,6 @@ Route::middleware('auth:api')->prefix('api')->namespace('Hanoivip\GateClient\Con
 
 // Public APIs
 Route::prefix('api')->namespace('Hanoivip\GateClient\Controllers')->group(function () {
-    // Yêu cầu thay đổi giá trị tài khoản ( tăng, giảm )
-    // Route::get('/balance', 'BalanceController@modify');
-    // Trả thẻ trễ
-    //Route::get('/delay', 'TopupController@delay');
     // Lấy xếp hạng tài phú
     Route::get('/topup/rank/global', 'TopupController@globalRank');
     // Lấy xếp hạng tài phú - theo tuần, tháng...

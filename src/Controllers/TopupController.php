@@ -62,28 +62,6 @@ class TopupController extends Controller
             }
         }
     }
-    /***
-     * @deprecated
-     * @param Request $request
-     * @return \Illuminate\Http\Response|\Illuminate\Contracts\Routing\ResponseFactory
-     */
-    public function delay(Request $request)
-    {
-        $mapping = $request->input('mapping');
-        $value = $request->input('value');
-        $newReturned = "";
-        if ($request->has('returned'))
-            $newReturned = $request->input('returned');
-        if ($this->topup->callback($mapping, $value, $newReturned))
-        {
-            //TODO: KNP Protocol handler??
-            return response('RESULT:10@');
-        }
-        else 
-        {
-            return response('RESULT:00@');
-        }
-    }
     
     public function topupHistory(Request $request)
     {
@@ -242,63 +220,6 @@ class TopupController extends Controller
                 return ['result' => ['error_message' => __('hanoivip::topup.system-error')]];
             return view('hanoivip::topup_result', 
                 [ 'error_message' => __('hanoivip::topup.system-error') ]);
-        }
-    }
-    
-    public function topup2bk(Request $request)
-    {
-        try
-        {
-            $uid = Auth::user()->getAuthIdentifier();
-            $submission = $this->topup->prerouted($uid, $request->all());
-            if (gettype($submission) == 'string')
-            {
-                if ($request->ajax())
-                    return ['result' => ['delay' => false, 'mapping' =>'', 'error_message' => $submission]];
-                    else
-                        return view('hanoivip::topup_result', [ 'error_message' => $submission]);
-            }
-            else
-            {
-                $parser = app()->makeWith('GateResponseParser', [ $submission->api_returned ]);
-                if ($parser->isSuccess())
-                {
-                    $message = $this->topup->getExplainMessage($submission);
-                }
-                else
-                {
-                    $error_message = $parser->getExplainMessage();
-                }
-                if ($request->ajax())
-                {
-                    $result = ['delay' => false, 'mapping' => $submission->mapping];
-                    if (isset($message)) {
-                        $result['message'] = $message;
-                        // add success page for tracking
-                        $result['topath'] = route('topup.success', ['message' => $message]);
-                    }
-                    if (isset($error_message))
-                        $result['error_message'] = $error_message;
-                        if ($parser->isDelay())
-                            $result['delay'] = true;
-                            return ['result' => $result];
-                }
-                else
-                {
-                    if (isset($message))
-                        return view('hanoivip::topup_result', [ 'message' => $message]);
-                        if (isset($error_message))
-                            return view('hanoivip::topup_result', [ 'error_message' => $error_message]);
-                }
-            }
-        }
-        catch (Exception $ex)
-        {
-            Log::error('Topup payment exception. Msg:' . $ex->getMessage());
-            if ($request->ajax())
-                return ['result' => ['error_message' => __('hanoivip::topup.system-error')]];
-                return view('hanoivip::topup_result',
-                    [ 'error_message' => __('hanoivip::topup.system-error') ]);
         }
     }
     
