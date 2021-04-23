@@ -107,10 +107,9 @@ class TopupService
         $objects = [];
         foreach ($submissions as $sub)
         {
-            $obj = new \stdClass();// fast, no need to create view objects class...
+            $obj = new \stdClass();
             //$obj->serial = $sub->serial;
             $obj->password = $sub->password;
-            //$obj->message = $this->getExplainMessage($sub);
             $obj->status = $this->getSubmissionStatus($sub);
             $obj->dvalue = $sub->dvalue;
             $obj->value = $sub->value;
@@ -143,30 +142,6 @@ class TopupService
         }
         return $status;
     }
-    
-    public function getExplainMessage($submission)
-    {
-        $parser = app()->makeWith('GateResponseParser', [ $submission->api_returned ]);
-        if ($parser->isSuccess())
-        {
-            $value = $submission->value;
-            if ($parser->isDelay() && empty($value))
-                $message = __('hanoivip::topup.delay');
-            else
-            {
-                $message = __('hanoivip::topup.success', ['value' => $value]);
-                if ($submission->dvalue > 0 && $submission->dvalue != $submission->value)
-                    $message .= __('hanoivip::topup.success-wrong-value', ['cutoff' => $this->getWrongValueCutoff()]);
-            }
-        }
-        else
-        {
-            $message = $parser->getExplainMessage();
-        }
-        return $message;
-    }
-    
-    
     /**
      * Trả về thẻ trễ. Nếu thẻ đúng cập nhật giá trị.
      * Nếu thẻ sai, cập nhật trạng thái

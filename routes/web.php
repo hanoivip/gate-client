@@ -5,23 +5,19 @@ Route::middleware([
     'web',
     'auth:web'
 ])->namespace('Hanoivip\GateClient\Controllers')->group(function () {
-
+    // gate default path
     Route::get('/topup', 'TopupController@topupUI2');
     Route::get('/history', 'TopupController@history')->name('history');
-
     // new gate version
     Route::get('/topup/step1', 'TopupController@topupUI2')->name('topup');
     Route::get('/topup/step2', 'TopupController@selectType')->name('topup.by.type');
     Route::post('/topup/result', 'TopupController@topup2')->name('webTopup');
     Route::get('/topup/recaptcha', 'TopupController@recaptcha')->name('topup.recaptcha');
     Route::get('/topup/cancel', 'TopupController@cancel')->name('topup.cancel');
-    // end
-
     // reactjs UI
     Route::get('/jtopup', 'TopupController@jsTopup')->name('jtopup');
     Route::get('/jhistory', 'TopupController@jsHistory')->name('jhistory');
     Route::get('/jrecharge', 'TopupController@jsRecharge')->name('jrecharge');
-
     // tracking topup
     Route::get('/topup/success', 'TopupController@onTopupSuccess')->name('topup.success');
 });
