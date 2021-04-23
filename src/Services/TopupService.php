@@ -90,76 +90,6 @@ class TopupService
         else
             Cache::add($key, time(), $expires);
     }
-    
-    /**
-     * Kiểm tra trùng thẻ
-     * Kiểm tra nạp lỗi nhiều lần
-     * Tạo log/submission
-     * - Lưu thông tin
-     * - Tạo mã đối xoát
-     * Gọi lên cổng thanh toán
-     * - Cập nhật giá trị
-     * Kích hoạt tính toán thưởng
-     * 
-     * @param string $uid
-     * @param string $serial
-     * @param string $password
-     * @param string $type
-     * @param string $mapping
-     * @return Submission
-     */
-    public function byCard($uid, $serial, $password, $type)
-    {
-        // Validate param: TODO: move to request validation
-        if (empty($serial) || empty($password) || empty($type))
-            throw new Exception('Kiểm tra lại serial/password/loại thẻ.');
-        
-        // Check submited?
-        $exists = Submission::where('serial', $serial)
-                    ->where('password', $password)
-                    ->where('type', $type)
-                    ->get();
-        
-        if (!empty($exists))
-            throw new Exception('Thẻ đã nạp.');
-        
-        // Limit failure rate
-        $lastErrorTs = $this->getLastErrorTs($uid);
-        if (time() - $lastErrorTs < 300)//5mins
-            throw new Exception('Lần nạp thẻ trước bị sai. Cần đợi 5p trước khi tiếp tục. Còn (' . (300 - time() + $lastErrorTs) . ' giây)');
-            
-        // New submission
-        $mapping = uniqid();
-        $sub = new Submission();
-        $sub->user_id = $uid;
-        $sub->serial = $serial;
-        $sub->password = $password;
-        $sub->type = $type;
-        $sub->mapping = $mapping;
-        $sub->penalty = 0;
-        
-        // Invoke
-        $returned = GateFacade::check($type, $serial, $password, $mapping);
-        $sub->api_returned = $returned;
-        $sub->save();
-        
-        $parser = app()->makeWith('GateResponseParser', [$returned]);
-        if ($parser->getValue() > 0)
-        {
-            $sub->value = $parser->getValue();
-            $sub->save();
-            
-            $this->balance->add($uid, $sub->value, "Topup:" . $mapping);
-            event(new UserTopup($uid, $sub->value, $mapping));
-        }
-        if (!$parser->isSuccess())
-        {
-            $this->setLastErrorTs($uid);
-        }
-        return $sub;
-        
-    }
-    
     /**
      * 
      * @param number $uid UserID
@@ -339,14 +269,6 @@ class TopupService
         $password = $params['password'];
         $captcha = isset($params['captcha']) ? $params['captcha'] : '';
         
-        /* Dang loi nhieu, mo ra de test
-        $exists = Submission::where('serial', $serial)
-        ->where('password', $password)
-        ->where('type', $type)
-        ->get();
-        if (!$exists->isEmpty())
-            return 'Thẻ đã nạp.');
-        */
         // Limit failure rate. TODO: move to throtte
         $lastErrorTs = $this->getLastErrorTs($uid);
         if (time() - $lastErrorTs < 60)

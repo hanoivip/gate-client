@@ -34,34 +34,6 @@ class TopupController extends Controller
         $this->balance = $balance;
         $this->stats = $stats;
     }
-    /**
-     * @deprecated
-     * @param Request $request
-     * @return NULL[]
-     */
-    public function topup(Request $request)
-    {
-        if (Auth::check())
-        {
-            $serial = $request->input('serial');
-            $password = $request->input('password');
-            $type = $request->input('type');         
-            Log::debug('seri:' . $serial . ',pass:' . $password . ',type:' . $type);
-            try 
-            {
-                $uid = Auth::user()->getAuthIdentifier();
-                $submission = $this->topup->byCard($uid, $serial, $password, $type);
-                $parser = app()->makeWith('GateResponseParser', [ $submission->api_returned ]);
-                
-                return ['mapping' => $submission->mapping, 'is_success' => $parser->isSuccess(), 
-                    'is_delay' => $parser->isDelay(), 'value' => $parser->getValue()];
-            }
-            catch (Exception $ex)
-            {
-                return ['error_message' => $ex->getMessage()];
-            }
-        }
-    }
     
     public function topupHistory(Request $request)
     {
