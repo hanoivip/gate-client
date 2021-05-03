@@ -16,6 +16,7 @@ class TopupServiceProvider extends ServiceProvider
         });
         $this->commands([
             \Hanoivip\GateClient\Commands\PolicyNew::class,
+            \Hanoivip\GateClient\Commands\TestBalance::class,
         ]);
     }
     
