@@ -38,4 +38,6 @@ Route::middleware([
     Route::get('/income/today', 'Statistics@today')->name('ecmin.income.today');
     Route::get('/income/month', 'Statistics@thisMonth')->name('ecmin.income.thisMonth');
     Route::post('/income', 'Statistics@statByTime')->name('ecmin.income.byTime');
+    // User topup history
+    Route::post('/topup/history', 'AdminController@history')->name('ecmin.topup.history');
 });

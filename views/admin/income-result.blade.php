@@ -6,5 +6,4 @@
 
 Doanh số: {{$sum}} vnd
 
-
 @endsection

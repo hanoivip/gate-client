@@ -41,7 +41,7 @@ class Statistics extends Controller
     {
         $sum = Submission::where('created_at', '>=', $startTime)
         ->where('created_at', '<', $endTime)
-        ->sum('value');
+        ->sum('final_value');
         return $sum;
     }
 }
